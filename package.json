@@ -1,0 +1,27 @@
+{
+  "name": "groupstage-dynamic",
+  "description": "A dynamic GroupStage tournament that automatically tiebreaks",
+  "author": "Eirik Albrigtsen <analsandblaster@gmail.com>",
+  "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "clux/groupstage-dynamic"
+  },
+  "keywords": [],
+  "main": "dgs.js",
+  "scripts": {
+    "test": "tap test/*.js"
+  },
+  "dependencies": {
+    "dynamic-tournament": "0.0.0",
+    "tiebreaker": "~0.3.0",
+    "groupstage": "~0.6.2"
+  },
+  "devDependencies": {
+    "tap": "~0.4.4"
+  },
+  "bugs": {
+    "url": "http://github.com/clux/groupstage-dynamic/issues"
+  },
+  "license": "MIT"
+}
