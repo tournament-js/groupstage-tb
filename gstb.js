@@ -1,28 +1,28 @@
 var GroupStage = require('groupstage');
 var TieBreaker = require('tiebreaker');
-var Dynamic = require('dynamic-tournament');
+var Tourney = require('tourney');
 
-function DynamicGroupStage(numPlayers, opts) {
+function GroupStageTb(numPlayers, opts) {
   this.numPlayers = numPlayers;
   opts = GroupStage.defaults(numPlayers, opts);
   var invReason = GroupStage.invalid(numPlayers, opts);
   if (invReason !== null) {
-    console.error("Invalid %d player DynamicGroupStage with opts=%j rejected",
+    console.error("Invalid %d player GroupStageTb with opts=%j rejected",
       numPlayers, opts
     );
-    throw new Error("Cannot construct DynamicGroupStage: " + invReason);
+    throw new Error("Cannot construct GroupStageTb: " + invReason);
   }
   var gs = new GroupStage(this.numPlayers, opts);
   this.limit = opts.limit;
-  Dynamic.call(this, gs);
+  Tourney.call(this, gs);
 }
-//DynamicGroupStage.idString = function (id) {
+//GroupStageTb.idString = function (id) {
 //  return [id.t, id.s, id.r, id.m].join('-');
 //};
-Dynamic.inherit(DynamicGroupStage, Dynamic);
+Tourney.inherit(GroupStageTb, Tourney);
 
 /*
-DynamicGroupStage.configure({
+GroupStageTb.configure({
   defaults: function (np, opts) {
     opts = GroupStage.defaults(opts);
     // TODO: add own options on top?
@@ -40,7 +40,7 @@ DynamicGroupStage.configure({
   }
 });*/
 
-DynamicGroupStage.prototype._createNext = function () {
+GroupStageTb.prototype._createNext = function () {
   var tb = TieBreaker.from(this._trn, this.limit, { grouped: true });
 
   if (tb.matches.length > 0) {
@@ -49,9 +49,9 @@ DynamicGroupStage.prototype._createNext = function () {
   return null;
 };
 
-DynamicGroupStage.prototype.isDone = function () {
+GroupStageTb.prototype.isDone = function () {
   return this._trn.isDone() && !TieBreaker.isNecessary(this._trn, this.limit);
 };
 
 
-module.exports = DynamicGroupStage;
+module.exports = GroupStageTb;

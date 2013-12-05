@@ -1,19 +1,24 @@
 {
-  "name": "groupstage-dynamic",
-  "description": "A dynamic GroupStage tournament that automatically tiebreaks",
+  "name": "groupstage-tb",
+  "description": "GroupStage tourney that tiebreaks until all done",
   "author": "Eirik Albrigtsen <analsandblaster@gmail.com>",
   "version": "0.0.0",
   "repository": {
     "type": "git",
-    "url": "clux/groupstage-dynamic"
+    "url": "clux/groupstage-tb"
   },
-  "keywords": [],
-  "main": "dgs.js",
+  "keywords": [
+    "repeat",
+    "tiereaker",
+    "after",
+    "groupstage"
+  ],
+  "main": "gstb.js",
   "scripts": {
     "test": "tap test/*.js"
   },
   "dependencies": {
-    "dynamic-tournament": "0.0.0",
+    "tourney": "0.1.0",
     "tiebreaker": "~0.3.0",
     "groupstage": "~0.6.2"
   },
@@ -21,7 +26,7 @@
     "tap": "~0.4.4"
   },
   "bugs": {
-    "url": "http://github.com/clux/groupstage-dynamic/issues"
+    "url": "http://github.com/clux/groupstage-tb/issues"
   },
   "license": "MIT"
 }

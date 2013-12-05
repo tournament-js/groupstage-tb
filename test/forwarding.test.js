@@ -1,9 +1,9 @@
-var DynamicGS = require('../');
-var GS = require('groupstage');
-var test = require('tap').test;
+var GsTb = require('../')
+  , GS = require('groupstage')
+  , test = require('tap').test;
 
 test("forwarding 16 4", function (t) {
-  var d = new DynamicGS(16, { groupSize: 4, limit: 4 });
+  var d = new GsTb(16, { groupSize: 4, limit: 4 });
   t.ok(!d.stageComplete(), 'need to play first round');
 
   var ensureMiddleBoundaries = function (d) {
