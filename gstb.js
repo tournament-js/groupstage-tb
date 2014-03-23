@@ -55,7 +55,7 @@ GroupStageTb.prototype.currentRound = function () {
   return stg.length && stg[0];
 };
 
-GroupStage.prototype.results = function () {
+GroupStageTb.prototype.results = function () {
   // don't use default implementation - just defer to GroupStage or TieBreaker
   return this.currentRound().results();
 };
