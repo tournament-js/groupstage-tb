@@ -2,7 +2,7 @@
   "name": "groupstage-tb",
   "description": "GroupStage tourney that tiebreaks until all done",
   "author": "Eirik Albrigtsen <analsandblaster@gmail.com>",
-  "version": "0.1.0",
+  "version": "0.2.1",
   "repository": {
     "type": "git",
     "url": "clux/groupstage-tb"
@@ -20,7 +20,7 @@
     "coveralls": "npm run coverage | coveralls"
   },
   "dependencies": {
-    "tourney": "0.2.2",
+    "tourney": "~0.2.2",
     "tiebreaker": "~0.4.0",
     "groupstage": "~0.7.0"
   },

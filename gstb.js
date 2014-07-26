@@ -9,6 +9,7 @@ function GroupStageTb(numPlayers, opts) {
     console.error("Invalid %d player GroupStageTb with opts=%j rejected",
       numPlayers, opts
     );
+    // TODO: throw if !opts.limit
     throw new Error("Cannot construct GroupStageTb: " + invReason);
   }
   var gs = new GroupStage(numPlayers, opts);
@@ -56,5 +57,14 @@ GroupStageTb.prototype.isTieBreakerRound = function () {
   return this._trns[0].name === 'TieBreaker';
 };
 
+GroupStageTb.prototype.currentRound = function () {
+  var stg = this.currentStage();
+  return stg.length && stg[0];
+};
+
+GroupStageTb.prototype.results = function () {
+  // don't use default implementation - just defer to GroupStage or TieBreaker
+  return this.currentRound().results();
+};
 
 module.exports = GroupStageTb;
