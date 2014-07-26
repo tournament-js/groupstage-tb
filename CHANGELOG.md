@@ -1,3 +1,7 @@
+0.2.2 / 2014-XX-XX
+==================
+  * Documentation and coverage
+
 0.2.1 / 2014-03-23
 ==================
   * updated to work with new tourney
