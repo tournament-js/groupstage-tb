@@ -15,15 +15,19 @@
   ],
   "main": "gstb.js",
   "scripts": {
-    "test": "tap test/*.js"
+    "test": "nodeunit test/*.js --reporter=verbose",
+    "coverage": "jscoverage gstb.js && GSTB_COV=1 nodeunit --reporter=lcov test",
+    "coveralls": "npm run coverage | coveralls"
   },
   "dependencies": {
-    "tourney": "0.1.0",
-    "tiebreaker": "~0.3.0",
-    "groupstage": "~0.6.2"
+    "tourney": "0.2.2",
+    "tiebreaker": "~0.4.0",
+    "groupstage": "~0.7.0"
   },
   "devDependencies": {
-    "tap": "~0.4.4"
+    "coveralls": "^2.11.1",
+    "jscoverage": "^0.5.5",
+    "nodeunit": "^0.9.0"
   },
   "bugs": {
     "url": "http://github.com/clux/groupstage-tb/issues"

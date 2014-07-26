@@ -3,7 +3,6 @@ var TieBreaker = require('tiebreaker');
 var Tourney = require('tourney');
 
 function GroupStageTb(numPlayers, opts) {
-  this.numPlayers = numPlayers;
   opts = GroupStage.defaults(numPlayers, opts);
   var invReason = GroupStage.invalid(numPlayers, opts);
   if (invReason !== null) {
@@ -12,13 +11,13 @@ function GroupStageTb(numPlayers, opts) {
     );
     throw new Error("Cannot construct GroupStageTb: " + invReason);
   }
-  var gs = new GroupStage(this.numPlayers, opts);
+  var gs = new GroupStage(numPlayers, opts);
   this.limit = opts.limit;
-  Tourney.call(this, gs);
+  Tourney.call(this, [gs]);
 }
-//GroupStageTb.idString = function (id) {
-//  return [id.t, id.s, id.r, id.m].join('-');
-//};
+GroupStageTb.idString = function (id) {
+  return [id.t, id.s, id.r, id.m].join('-');
+};
 Tourney.inherit(GroupStageTb, Tourney);
 
 /*
@@ -41,16 +40,20 @@ GroupStageTb.configure({
 });*/
 
 GroupStageTb.prototype._createNext = function () {
-  var tb = TieBreaker.from(this._trn, this.limit, { grouped: true });
+  var tb = TieBreaker.from(this._trns[0], this.limit, { grouped: true });
 
   if (tb.matches.length > 0) {
-    return tb; // we needed to tiebreak :(
+    return [tb]; // we needed to tiebreak :(
   }
-  return null;
+  return [];
 };
 
 GroupStageTb.prototype.isDone = function () {
-  return this._trn.isDone() && !TieBreaker.isNecessary(this._trn, this.limit);
+  return this._trns[0].isDone() && !TieBreaker.isNecessary(this._trns[0], this.limit);
+};
+
+GroupStageTb.prototype.isTieBreakerRound = function () {
+  return this._trns[0].name === 'TieBreaker';
 };
 
 
