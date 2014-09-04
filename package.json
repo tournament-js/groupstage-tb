@@ -20,9 +20,8 @@
     "coveralls": "npm run coverage | coveralls"
   },
   "dependencies": {
-    "tourney": "~0.2.2",
-    "tiebreaker": "~0.4.0",
-    "groupstage": "~0.7.0"
+    "tiebreaker": "^1.0.0",
+    "groupstage": "^1.0.1"
   },
   "devDependencies": {
     "coveralls": "^2.11.1",
