@@ -2,7 +2,7 @@
   "name": "groupstage-tb",
   "description": "GroupStage tourney that tiebreaks until all done",
   "author": "Eirik Albrigtsen <analsandblaster@gmail.com>",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "repository": {
     "type": "git",
     "url": "clux/groupstage-tb"
