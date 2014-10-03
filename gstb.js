@@ -1,5 +1,6 @@
 var GroupStage = require('groupstage');
 var TieBreaker = require('tiebreaker');
+var $ = require('autonomy');
 
 function GroupStageTb(numPlayers, opts) {
   opts = GroupStageTb.defaults(numPlayers, opts);
@@ -23,10 +24,10 @@ GroupStageTb.invalid = function (np, opts) {
   if (invReason !== null) {
     return invReason;
   }
-  var numGroups = Math.ceil(np / o.groupSize);
   if (o.limit <= 0) {
     return "need to specify a non-zero limit";
   }
+  var numGroups = Math.ceil(np / o.groupSize);
   if (o.limit % numGroups !== 0) {
     return "number of groups must divide limit";
   }
@@ -53,6 +54,13 @@ GroupStageTb.prototype.results = function () {
 // TODO: maybe freeze/unfreeze matches so only score modifies it
 GroupStageTb.prototype.active = function () {
   return this.current.matches.slice(); // old-style matches
+};
+
+GroupStageTb.prototype.players = function (id) {
+  if (!id.t || id.t === this.stage) {
+    return this.current.players(id);
+  }
+  // TODO: else look through old matches ?
 };
 
 function Id(t, s, r, m) {
@@ -106,11 +114,18 @@ GroupStageTb.prototype.isTieBreakerRound = function () {
   return this.current.name === 'TieBreaker';
 };
 
-// TODO: ::upcoming (calculate to see if player needed in tiebreaker round)
+GroupStageTb.prototype.upcoming = function (playerId) {
+  if (!this.isStageComplete()) {
+    var partial = this.current.upcoming(playerId);
+    return partial ? $.extend({ t: this.stage }, partial) : undefined;
+  }
+  // NB: do NOT figure out id by creating deterministic tiebreaker round early
+  // if we gave out the ID, any 'link' to such a match would fail to exist yet
 
-GroupStageTb.prototype.results = function () {
-  // just defer to groupstage or tiebreaker - both take care of this
-  return this.current.results();
+  // although this kind of implies a policy:
+  // never guess upcoming between stages
+  // which sounds sensible - maybe some stage creation is parametrized..
 };
+
 
 module.exports = GroupStageTb;

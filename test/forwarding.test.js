@@ -50,19 +50,27 @@ exports.sixteenFourForwarding = function (t) {
   t.deepEqual(msTb2, expR3, "Stage 3 === Group 1 TB");
   t.equal(expR3.length, GS(4).matches.length, "length equivalent to a 4p GS");
   // TODO: bad use of this.current
-  t.equal(trn.current.players().length, 4, "4 players left");
+  t.deepEqual(trn.current.players(), [1, 5, 12, 16], "4 players left");
+  t.deepEqual(trn.upcoming(1), { t: 3, s: 1, r: 1, m: 1 }, "player 1 upcoming s3");
+  t.deepEqual(trn.upcoming(5), { t: 3, s: 1, r: 1, m: 2 }, "player 5 upcoming s3");
 
   msTb2.forEach(function (m) {
     // reduce num players for next
     trn.score(m.id, (m.id.m === 1) ? [1,1] : [1,0]);
   });
 
+  t.equal(trn.upcoming(5), undefined, "no information until next round");
+
   ensureMiddleBoundaries();
   t.ok(trn.isTieBreakerRound(), 'we should still be tied 3');
+
+  t.equal(trn.upcoming(1), undefined, "player one was knocked out of stage 3");
+  t.deepEqual(trn.upcoming(5), { t: 4, s: 1, r: 2, m: 1 }, "player 5 upcoming s4");
 
   var msTb3 = trn.active();
   // TODO: use of this.current should not be needed - although this is helpful:
   t.deepEqual(trn.current.players(), [5,12,16], '2nd placers in grp 1');
+
 
   msTb3.forEach(function (m) {
     trn.score(m.id, m.p[0] < m.p[1] ? [1,0] : [0,1]); // resolve rest
