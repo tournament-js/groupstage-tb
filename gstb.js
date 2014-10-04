@@ -45,12 +45,12 @@ GsTb.prototype.inTieBreaker = function () {
 //------------------------------------------------------------------
 
 GsTb.prototype._mustPropagate = function () {
-  return TieBreaker.isNecessary(this.current, this.limit);
+  return TieBreaker.isNecessary(this._inst, this.limit);
 };
 
 GsTb.prototype._createNext = function () {
   // inst is GroupStage or TieBreaker but solution is always the same:
-  return TieBreaker.from(this.current, this.limit, { grouped: true });
+  return TieBreaker.from(this._inst, this.limit, { grouped: true });
 };
 
 //------------------------------------------------------------------
