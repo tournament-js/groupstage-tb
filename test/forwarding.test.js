@@ -60,7 +60,7 @@ exports.sixteenFourLimitFour = function (t) {
   });
   t.deepEqual(msTb2, expR3, "Stage 3 === Group 1 TB");
   t.equal(expR3.length, GS(4).matches.length, "length equivalent to a 4p GS");
-  t.deepEqual(trn.players(), [1, 5, 12, 16], "4 players left");
+  t.deepEqual(trn.players(), [1, 5, 12, 16], "group 1 remaining in second tb");
   t.deepEqual(trn.upcoming(1)[0].id, { s: 1, r: 1, m: 1 }, "player 1 upcoming s3");
   t.deepEqual(trn.upcoming(5)[0].id, { s: 1, r: 1, m: 2 }, "player 5 upcoming s3");
 
@@ -90,6 +90,41 @@ exports.sixteenFourLimitFour = function (t) {
   t.ok(trn.isDone(), "and tourney complete");
   
   t.ok(!trn.createNextStage(), "thus createNextStage fails");
+
+  // so all players except G1 (1,5,12,16) are scored by rank
+  // inject 1 in 4th placers (since was knocked out)
+  // inject  then finally 5 is better than 12 is better than 16
+  // so sort by seed as normal
+
+  var res = trn.results();
+  res.forEach(function (r) {
+    // ignore clutter - all identical because everyone tied in GroupStage
+    delete r.wins; // all 0
+    delete r.draws; // all 3
+    delete r.losses; // all 0
+    delete r.for; // all 3
+    delete r.against; // all 3
+    delete r.pts; // all 3 (3x ties)
+  });
+  t.deepEqual(res, [
+      { seed: 2, pos: 1, grp: 2, gpos: 1 },
+      { seed: 3, pos: 1, grp: 3, gpos: 1 },
+      { seed: 4, pos: 1, grp: 4, gpos: 1 },
+      { seed: 5, pos: 1, grp: 1, gpos: 1 },
+      { seed: 6, pos: 5, grp: 2, gpos: 2 },
+      { seed: 7, pos: 5, grp: 3, gpos: 2 },
+      { seed: 8, pos: 5, grp: 4, gpos: 2 },
+      { seed: 12, pos: 5, grp: 1, gpos: 2 },
+      { seed: 9, pos: 9, grp: 4, gpos: 3 },
+      { seed: 10, pos: 9, grp: 3, gpos: 3 },
+      { seed: 11, pos: 9, grp: 2, gpos: 3 },
+      { seed: 16, pos: 9, grp: 1, gpos: 3 },
+      { seed: 1, pos: 13, grp: 1, gpos: 4 },
+      { seed: 13, pos: 13, grp: 4, gpos: 4 },
+      { seed: 14, pos: 13, grp: 3, gpos: 4 },
+      { seed: 15, pos: 13, grp: 2, gpos: 4 }
+    ], 'results verification'
+  );
 
   t.done();
 };
