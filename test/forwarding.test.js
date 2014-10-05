@@ -1,6 +1,15 @@
 var GsTb = require(process.env.GSTB_COV ? '../gstb-cov.js' : '../')
   , GS = require('groupstage');
 
+exports.invalid = function (t) {
+  var inv = GsTb.invalid;
+  t.equal(inv(1), "numPlayers cannot be less than 2", "gs reason");
+  t.equal(inv(4), "need to specify a non-zero limit", "1st limitation");
+  t.equal(inv(8, { groupSize: 4, limit: 3}), "number of groups must divide limit",
+    'limit must be sensible'
+  );
+  t.done();
+};
 exports.sixteenFourLimitFour = function (t) {
   var trn = new GsTb(16, { groupSize: 4, limit: 4 });
   t.ok(!trn.stageDone(), 'need to play first round');
