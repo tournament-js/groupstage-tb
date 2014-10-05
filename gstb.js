@@ -58,8 +58,7 @@ GsTb.prototype._createNext = function () {
 //------------------------------------------------------------------
 
 GsTb.prototype.results = function () {
-  // if inGroupStage - _inst.results() are correct
-  // else TieBreaker has updated previous results it was fed
+  // Simpler than Tourney's - TieBreaker already does that work
   return this._inst.results();
 };
 
