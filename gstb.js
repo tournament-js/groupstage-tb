@@ -3,7 +3,7 @@ var TieBreaker = require('tiebreaker');
 var Tourney = require('tourney');
 
 var GsTb = Tourney.sub('GroupStage-Tb', function (opts, initParent) {
-  this.limit = opts.limit;
+  Object.defineProperty(this, '_limit', { value: opts.limit });
   initParent(new GroupStage(this.numPlayers, opts));
 });
 
@@ -45,12 +45,12 @@ GsTb.prototype.inTieBreaker = function () {
 //------------------------------------------------------------------
 
 GsTb.prototype._mustPropagate = function () {
-  return TieBreaker.isNecessary(this._inst, this.limit);
+  return TieBreaker.isNecessary(this._inst, this._limit);
 };
 
 GsTb.prototype._createNext = function () {
   // inst is GroupStage or TieBreaker but solution is always the same:
-  return TieBreaker.from(this._inst, this.limit, { grouped: true });
+  return TieBreaker.from(this._inst, this._limit, { grouped: true });
 };
 
 //------------------------------------------------------------------
