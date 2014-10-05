@@ -13,6 +13,7 @@ exports.invalid = function (t) {
 exports.sixteenFourLimitFour = function (t) {
   var trn = new GsTb(16, { groupSize: 4, limit: 4 });
   t.ok(!trn.stageDone(), 'need to play first round');
+  t.ok(trn.inGroupStage(), 'start out in groupstage');
 
   var ensureMiddleBoundaries = function () {
     t.ok(!trn.isDone(), "whole tournament not done");
@@ -32,6 +33,7 @@ exports.sixteenFourLimitFour = function (t) {
 
   ensureMiddleBoundaries();
   t.ok(trn.inTieBreaker(), 'we should be tied now 1');
+  t.ok(!trn.inGroupStage(), 'thus no longer in GroupStage');
 
 
   var msTb = trn.matches;
