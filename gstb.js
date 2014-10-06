@@ -2,9 +2,8 @@ var GroupStage = require('groupstage');
 var TieBreaker = require('tiebreaker');
 var Tourney = require('tourney');
 
-var GsTb = Tourney.sub('GroupStage-Tb', function (opts, initParent) {
-  Object.defineProperty(this, '_limit', { value: opts.limit });
-  initParent(new GroupStage(this.numPlayers, opts));
+var GsTb = Tourney.sub('GroupStage-Tb', function (opts, init) {
+  init(new GroupStage(this.numPlayers, opts));
 });
 
 GsTb.configure({
@@ -33,33 +32,28 @@ GsTb.configure({
 //------------------------------------------------------------------
 
 GsTb.prototype.inGroupStage = function () {
-  return this._inst.name === 'GroupStage';
+  return this.getName(1) === 'GroupStage';
 };
 
 GsTb.prototype.inTieBreaker = function () {
-  return this._inst.name === 'TieBreaker';
+  return this.getName(1) === 'TieBreaker';
 };
 
 //------------------------------------------------------------------
 // Expected methods
 //------------------------------------------------------------------
 
-GsTb.prototype._mustPropagate = function () {
-  return TieBreaker.isNecessary(this._inst, this._limit);
+GsTb.prototype._mustPropagate = function (stg, inst, opts) {
+  return TieBreaker.isNecessary(inst, opts.limit);
 };
 
-GsTb.prototype._createNext = function () {
+GsTb.prototype._createNext = function (stg, inst, opts) {
   // inst is GroupStage or TieBreaker but solution is always the same:
-  return TieBreaker.from(this._inst, this._limit, { grouped: true });
+  return TieBreaker.from(inst, opts.limit, { grouped: true });
 };
 
-//------------------------------------------------------------------
-// Overrides
-//------------------------------------------------------------------
-
-GsTb.prototype.results = function () {
-  // Simpler than Tourney's - TieBreaker already does that work
-  return this._inst.results();
+GsTb.prototype._proxyRes = function () {
+  return true; // can always proxy results to current - TieBreaker feature
 };
 
 //------------------------------------------------------------------
