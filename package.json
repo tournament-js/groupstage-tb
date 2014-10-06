@@ -23,7 +23,7 @@
   "dependencies": {
     "tiebreaker": "^2.1.0",
     "groupstage": "^2.1.0",
-    "tourney": "^1.0.0-0"
+    "tourney": "^1.0.0-2"
   },
   "devDependencies": {
     "coveralls": "^2.11.1",
