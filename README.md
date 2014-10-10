@@ -9,6 +9,21 @@ An implementation of [tourney](https://github.com/clux/tourney). This module is 
 
 In other words this module tiebreaks, and only makes sense to use over `GroupStage` if you know exactly how many players to progress to another tournament.
 
+## Usage
+Use like `GroupStage`, but set `limit`
+
+```js
+var GS = require('groupstage-tb');
+var trn = new GS(16, { groupSize: 4, limit: 4 });
+// score trn.matches until trn.stageDone()
+while (!trn.isDone()) {
+  // trn will automatically tiebreak for us so we can pick group winner in each group
+  trn.createNextStage();
+  // keep scoring trn.matches (now tiebreakers) until trn.stageDone()
+}
+trn.complete(); // seal
+```
+
 ## Installation
 Install locally from npm:
 
