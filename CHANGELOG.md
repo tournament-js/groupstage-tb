@@ -1,3 +1,9 @@
+1.0.0 / 2014-10-10
+==================
+  * Rewrite using tourney@1.0.0 - older version deprecated - see documentation
+  * **Completely breaking update**
+  * Stability bumped to unstable
+
 0.3.0 / 2014-09-04
 ==================
   * Documentation and coverage
