@@ -1,3 +1,7 @@
+1.1.0 / 2014-10-11
+==================
+  * Bump dependencies for serialization safe state management
+
 1.0.0 / 2014-10-10
 ==================
   * Rewrite using tourney@1.0.0 - older version deprecated - see documentation
