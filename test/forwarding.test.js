@@ -7,9 +7,9 @@ var GsTb = require('..')
 
 test('invalid', function *(t) {
   var inv = GsTb.invalid;
-  t.equal(inv(1), 'numPlayers cannot be less than 2', 'gs reason');
-  t.equal(inv(4), 'need to specify a non-zero limit', '1st limitation');
-  t.equal(inv(8, { groupSize: 4, limit: 3}), 'number of groups must divide limit',
+  t.eq(inv(1), 'numPlayers cannot be less than 2', 'gs reason');
+  t.eq(inv(4), 'need to specify a non-zero limit', '1st limitation');
+  t.eq(inv(8, { groupSize: 4, limit: 3}), 'number of groups must divide limit',
     'limit must be sensible'
   );
 });
@@ -28,7 +28,7 @@ test('sixteenFourLimitFour', function *(t) {
 
   var msGs = trn.matches;
   var expR1 = new GS(16, { groupSize: 4 }).matches;
-  t.deepEqual(msGs, expR1, 'Stage 1 === orig GS');
+  t.eq(msGs, expR1, 'Stage 1 === orig GS');
 
   // score s.t. tiebreakers fully necessary
   msGs.forEach(function (m) {
@@ -46,7 +46,7 @@ test('sixteenFourLimitFour', function *(t) {
   var expR2 = expR1.slice().map(m => {
     return { id: tId(m.id.s, m.id.r, m.id.m, false), p: m.p };
   });
-  t.deepEqual(msTb, expR2, 'Stage 2 === orig GS in TB form');
+  t.eq(msTb, expR2, 'Stage 2 === orig GS in TB form');
   msTb.forEach(function (m) {
     if (m.id.s === 1) {
       // keep tieing group 1
@@ -65,27 +65,27 @@ test('sixteenFourLimitFour', function *(t) {
   var expR3 = expR2.slice().filter(function (m) {
     return m.id.s === 1;
   });
-  t.deepEqual(msTb2, expR3, 'Stage 3 === Group 1 TB');
-  t.equal(expR3.length, new GS(4).matches.length, 'length equivalent to a 4p GS');
-  t.deepEqual(trn.players(), [1, 5, 12, 16], 'group 1 remaining in second tb');
-  t.deepEqual(trn.upcoming(1)[0].id, tId(1, 1, 1), 'player 1 upcoming s3');
-  t.deepEqual(trn.upcoming(5)[0].id, tId(1, 1, 2), 'player 5 upcoming s3');
+  t.eq(msTb2, expR3, 'Stage 3 === Group 1 TB');
+  t.eq(expR3.length, new GS(4).matches.length, 'length equivalent to a 4p GS');
+  t.eq(trn.players(), [1, 5, 12, 16], 'group 1 remaining in second tb');
+  t.eq(trn.upcoming(1)[0].id, tId(1, 1, 1), 'player 1 upcoming s3');
+  t.eq(trn.upcoming(5)[0].id, tId(1, 1, 2), 'player 5 upcoming s3');
 
   msTb2.forEach(function (m) {
     // reduce num players for next
     trn.score(m.id, (m.id.m === 1) ? [1,1] : [1,0]);
   });
 
-  t.deepEqual(trn.upcoming(5), [], 'no information until next round');
+  t.eq(trn.upcoming(5), [], 'no information until next round');
 
   ensureMiddleBoundaries();
   t.ok(trn.inTieBreaker(), 'we should still be tied 3');
 
-  t.deepEqual(trn.upcoming(1), [], 'player one was knocked out of stage 3');
-  t.deepEqual(trn.upcoming(5)[0].id, tId(1, 2, 1), 'player 5 upcoming s4');
+  t.eq(trn.upcoming(1), [], 'player one was knocked out of stage 3');
+  t.eq(trn.upcoming(5)[0].id, tId(1, 2, 1), 'player 5 upcoming s4');
 
   var msTb3 = trn.matches;
-  t.deepEqual(trn.players(), [5,12,16], '2nd placers in grp 1');
+  t.eq(trn.players(), [5,12,16], '2nd placers in grp 1');
 
 
   msTb3.forEach(function (m) {
@@ -113,7 +113,7 @@ test('sixteenFourLimitFour', function *(t) {
     delete r.against; // all 3
     delete r.pts; // all 3 (3x ties)
   });
-  t.deepEqual(res, [
+  t.eq(res, [
     { seed: 2, pos: 1, grp: 2, gpos: 1 },
     { seed: 3, pos: 1, grp: 3, gpos: 1 },
     { seed: 4, pos: 1, grp: 4, gpos: 1 },
