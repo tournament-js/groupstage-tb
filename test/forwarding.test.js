@@ -1,16 +1,20 @@
-var GsTb = require(process.env.GSTB_COV ? '../gstb-cov.js' : '../')
-  , GS = require('groupstage');
+var GsTb = require('..')
+  , GS = require('groupstage')
+  , gId = (g, r, m) => new GS.Id(g, r, m)
+  , TB = require('tiebreaker')
+  , tId = (s, r, m, simple) => new TB.Id(s, r, m, simple)
+  , test = require('bandage');
 
-exports.invalid = function (t) {
+test('invalid', function *(t) {
   var inv = GsTb.invalid;
   t.equal(inv(1), "numPlayers cannot be less than 2", "gs reason");
   t.equal(inv(4), "need to specify a non-zero limit", "1st limitation");
   t.equal(inv(8, { groupSize: 4, limit: 3}), "number of groups must divide limit",
     'limit must be sensible'
   );
-  t.done();
-};
-exports.sixteenFourLimitFour = function (t) {
+});
+
+test('sixteenFourLimitFour', function *(t) {
   var trn = new GsTb(16, { groupSize: 4, limit: 4 });
   t.ok(!trn.stageDone(), 'need to play first round');
   t.ok(trn.inGroupStage(), 'start out in groupstage');
@@ -37,9 +41,12 @@ exports.sixteenFourLimitFour = function (t) {
 
 
   var msTb = trn.matches;
-  var expR2 = expR1.slice(); // no resolution at all in gs so tb is equivalent
-  t.deepEqual(msTb, expR2, "Stage 2 === orig GS in TB form");
 
+  // no resolution at all in gs so tb is equivalent - except for Ids being TIds
+  var expR2 = expR1.slice().map(m => {
+    return { id: tId(m.id.s, m.id.r, m.id.m, false), p: m.p };
+  });
+  t.deepEqual(msTb, expR2, "Stage 2 === orig GS in TB form");
   msTb.forEach(function (m) {
     if (m.id.s === 1) {
       // keep tieing group 1
@@ -61,8 +68,8 @@ exports.sixteenFourLimitFour = function (t) {
   t.deepEqual(msTb2, expR3, "Stage 3 === Group 1 TB");
   t.equal(expR3.length, GS(4).matches.length, "length equivalent to a 4p GS");
   t.deepEqual(trn.players(), [1, 5, 12, 16], "group 1 remaining in second tb");
-  t.deepEqual(trn.upcoming(1)[0].id, { s: 1, r: 1, m: 1 }, "player 1 upcoming s3");
-  t.deepEqual(trn.upcoming(5)[0].id, { s: 1, r: 1, m: 2 }, "player 5 upcoming s3");
+  t.deepEqual(trn.upcoming(1)[0].id, tId(1, 1, 1), "player 1 upcoming s3");
+  t.deepEqual(trn.upcoming(5)[0].id, tId(1, 1, 2), "player 5 upcoming s3");
 
   msTb2.forEach(function (m) {
     // reduce num players for next
@@ -75,7 +82,7 @@ exports.sixteenFourLimitFour = function (t) {
   t.ok(trn.inTieBreaker(), 'we should still be tied 3');
 
   t.deepEqual(trn.upcoming(1), [], "player one was knocked out of stage 3");
-  t.deepEqual(trn.upcoming(5)[0].id, { s: 1, r: 2, m: 1 }, "player 5 upcoming s4");
+  t.deepEqual(trn.upcoming(5)[0].id, tId(1, 2, 1), "player 5 upcoming s4");
 
   var msTb3 = trn.matches;
   t.deepEqual(trn.players(), [5,12,16], '2nd placers in grp 1');
@@ -88,7 +95,7 @@ exports.sixteenFourLimitFour = function (t) {
   // ensure everthing done - no middle boundry check this time
   t.ok(trn.stageDone(), 'final stage complete');
   t.ok(trn.isDone(), "and tourney complete");
-  
+
   t.ok(!trn.createNextStage(), "thus createNextStage fails");
 
   // so all players except G1 (1,5,12,16) are scored by rank
@@ -125,6 +132,4 @@ exports.sixteenFourLimitFour = function (t) {
       { seed: 15, pos: 13, grp: 2, gpos: 4 }
     ], 'results verification'
   );
-
-  t.done();
-};
+});
