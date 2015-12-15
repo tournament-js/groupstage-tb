@@ -1,3 +1,8 @@
+1.3.0 / 2015-12-15
+==================
+  * Also correctly bump tiebreaker and groupstage
+  * Bump tourney to the correct minor
+
 1.2.0 / 2015-12-15
 ==================
   * Bump tourney for configurable logs

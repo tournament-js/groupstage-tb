@@ -20,9 +20,9 @@
     "coverage": "cat coverage/lcov.info && rm -rf coverage"
   },
   "dependencies": {
-    "tiebreaker": "^3.0.0",
-    "groupstage": "^3.0.0",
-    "tourney": "^1.1.0"
+    "tiebreaker": "^3.1.0",
+    "groupstage": "^3.1.0",
+    "tourney": "^1.2.0"
   },
   "devDependencies": {
     "bandage": "^0.4.0",
