@@ -48,9 +48,8 @@ GsTb.prototype._mustPropagate = function (stg, inst, opts) {
 };
 
 GsTb.prototype._createNext = function (stg, inst, opts) {
-  // TODO: push opts.log onto options passed to Tb
   // inst is GroupStage or TieBreaker but solution is always the same:
-  return TieBreaker.from(inst, opts.limit, { grouped: true });
+  return TieBreaker.from(inst, opts.limit, { grouped: true, log: this._opts.log });
 };
 
 GsTb.prototype._proxyRes = function () {

@@ -1,3 +1,7 @@
+1.2.0 / 2015-12-15
+==================
+  * Bump tourney for configurable logs
+
 1.1.0 / 2014-10-11
 ==================
   * Bump dependencies for serialization safe state management

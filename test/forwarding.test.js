@@ -133,3 +133,35 @@ test('sixteenFourLimitFour', function *(t) {
     'results verification'
   );
 });
+
+// log override is passed to instances correctly
+var failLogInstances = function (t, trn) {
+  trn.score(trn.matches[0].id, ['a', 'b']); // first failure
+
+  trn.matches.forEach(function (m) {
+    if (m.id.s === 1) {
+      trn.score(m.id, [1,1]); // tie group 1
+    }
+    else {
+      trn.score(m.id, m.p[0] < m.p[1] ? [1,0] : [0,1]);
+    }
+  });
+  trn.createNextStage();
+  t.ok(trn.inTieBreaker(), 'in tiebreaker');
+  trn.score(trn.matches[0].id, ['a', 'b']); // second failure
+};
+
+test('errorLog voided', function *(t) {
+  t.plan(5); // failed (scoring + reason)x2 + tiebreaker verification
+  var errlog = function () {
+    t.pass('error log called');
+  };
+  var trn = new GsTb(16, { groupSize: 16, log: { error: errlog }, limit: 4});
+  failLogInstances(t, trn);
+});
+
+test('errorLog to stderr', function *(t) {
+  t.plan(1);
+  var trn = new GsTb(16, { groupSize: 16, limit: 4 });
+  failLogInstances(t, trn);
+});
