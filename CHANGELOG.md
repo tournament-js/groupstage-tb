@@ -1,3 +1,7 @@
+1.3.1 / 2015-12-20
+==================
+  * Documentation release
+
 1.3.0 / 2015-12-15
 ==================
   * Also correctly bump tiebreaker and groupstage

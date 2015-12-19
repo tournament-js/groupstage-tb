@@ -165,3 +165,52 @@ test('errorLog to stderr', function *(t) {
   var trn = new GsTb(16, { groupSize: 16, limit: 4 });
   failLogInstances(t, trn);
 });
+
+
+test('readme example', function *(t) {
+  var trn = new GsTb(6, { groupSize: 3, limit: 4 }); // want top 4 to proceed
+
+  t.eq(trn.matches, [
+    { id: gId(1, 1, 1), p: [ 3, 6 ] },
+    { id: gId(1, 2, 1), p: [ 1, 6 ] },
+    { id: gId(1, 3, 1), p: [ 1, 3 ] },
+    { id: gId(2, 1, 1), p: [ 4, 5 ] },
+    { id: gId(2, 2, 1), p: [ 2, 5 ] },
+    { id: gId(2, 3, 1), p: [ 2, 4 ] } ],
+    'matches equivalent to normal groupstage intsance'
+  );
+
+  // score it with ties
+  trn.matches.forEach(m => {
+    if (m.id.s === 2) {
+      trn.score(m.id, [1,1]); // tie group 2 completely
+    }
+    else {
+      trn.score(m.id, m.p[0] < m.p[1] ? [1,0]: [0,1]); // everywhere else scored in seed order
+    }
+  });
+
+  t.ok(trn.stageDone(), 'groupstage done');
+  t.false(trn.isDone(), 'cannot determine top 4 when one group is tied');
+  t.ok(trn.createNextStage(), 'forced to create another stage');
+
+  // new set of matches is the subset of matches needed to be played to break
+  // in this case we have to break an entire group, so it's a replay
+  t.eq(trn.matches, [
+    { id: tId(2, 1, 1, false), p: [ 4, 5 ] },
+    { id: tId(2, 2, 1, false), p: [ 2, 5 ] },
+    { id: tId(2, 3, 1, false), p: [ 2, 4 ] } ],
+    'matches is group two subset'
+  );
+
+  trn.matches.forEach(m => {
+    trn.score(m.id, m.p[0] < m.p[1] ? [1,0]: [0,1]); // score by seed
+  });
+
+  t.ok(trn.stageDone(), 'tiebreaker round over');
+  t.ok(trn.isDone(), 'no further tiebreaking needed');
+  trn.complete();
+
+  // Since we scored all matches by seeds (ultimately) - top 4 can be chosen unambiguously
+  t.eq(trn.results().slice(0,4).map(r => r.seed), [1,2,3,4], 'top 4 in results');
+});
