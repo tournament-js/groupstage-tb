@@ -51,7 +51,7 @@ trn.matches.forEach(m => {
 
 trn.stageDone(); // true - tiebreaker round over
 trn.isDone(); // true - no further tiebreaking needed
-trn.complete(); // true - can lock it down when isDone()
+trn.complete(); // can lock it down when isDone()
 
 // Since we scored all matches by seeds (ultimately) - top 4 can be chosen unambiguously
 trn.results().slice(0,4).map(r => r.seed);
