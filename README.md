@@ -17,12 +17,12 @@ var trn = new GS(6, { groupSize: 3, limit: 4 }); // want top 4 to proceed
 
 // matches are equivalent to a normal GroupStage instance
 trn.matches;
-[ { id: Id { s: 1, r: 1, m: 1 }, p: [ 3, 6 ] },
-  { id: Id { s: 1, r: 2, m: 1 }, p: [ 1, 6 ] },
-  { id: Id { s: 1, r: 3, m: 1 }, p: [ 1, 3 ] },
-  { id: Id { s: 2, r: 1, m: 1 }, p: [ 4, 5 ] },
-  { id: Id { s: 2, r: 2, m: 1 }, p: [ 2, 5 ] },
-  { id: Id { s: 2, r: 3, m: 1 }, p: [ 2, 4 ] } ]
+[ { id: { s: 1, r: 1, m: 1 }, p: [ 3, 6 ] },
+  { id: { s: 1, r: 2, m: 1 }, p: [ 1, 6 ] },
+  { id: { s: 1, r: 3, m: 1 }, p: [ 1, 3 ] },
+  { id: { s: 2, r: 1, m: 1 }, p: [ 4, 5 ] },
+  { id: { s: 2, r: 2, m: 1 }, p: [ 2, 5 ] },
+  { id: { s: 2, r: 3, m: 1 }, p: [ 2, 4 ] } ]
 
 // score it with ties
 trn.matches.forEach(m => {
@@ -41,9 +41,9 @@ trn.createNextStage(); // true (forced to create another stage)
 // new set of matches is the subset of matches needed to be played to break
 // in this case we have to break an entire group, so it's a replay
 trn.matches;
-[ { id: Id { s: 2, r: 1, m: 1 }, p: [ 4, 5 ] },
-  { id: Id { s: 2, r: 2, m: 1 }, p: [ 2, 5 ] },
-  { id: Id { s: 2, r: 3, m: 1 }, p: [ 2, 4 ] } ]
+[ { id: { s: 2, r: 1, m: 1 }, p: [ 4, 5 ] },
+  { id: { s: 2, r: 2, m: 1 }, p: [ 2, 5 ] },
+  { id: { s: 2, r: 3, m: 1 }, p: [ 2, 4 ] } ]
 
 trn.matches.forEach(m => {
   trn.score(m.id, m.p[0] < m.p[1] ? [1,0]: [0,1]); // score by seed
